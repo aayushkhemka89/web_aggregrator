@@ -1,0 +1,172 @@
+<head>
+  <title>siteace by aayush</title>
+</head>
+
+<body>
+
+
+
+</body>
+
+
+<template name="ApplicationLayout">
+  {{> yield "navbar"}}
+  {{> yield "main"}}
+</template>
+
+<template name="websites">
+  <div class="container">
+    {{> search_form}}
+   {{#if currentUser}}
+    {{> website_form}}
+   {{/if}}
+    {{> website_list}}
+  </div>
+</template>
+
+<template name="navbar">
+  <!-- navbar  - you will be putting the login functions here -->
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+          Site Ace
+        </a>
+       </div>
+      <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            {{> loginButtons}}
+          </ul>
+      </div>
+
+    </div>
+  </nav>
+</template>
+<template name="website_form">
+	<a class="btn btn-default js-toggle-website-form" href="#">
+  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Website
+	</a>
+	<div id="website_form" class="hidden_div">
+    <div class="panel">
+      <div class="panel-body">
+    		<form class="js-save-website-form">
+    		  <div class="form-group">
+    		    <label for="url">Site address</label>
+    		    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
+    		  </div>
+    		  <button type="submit" class="btn btn-default">Submit</button>
+    		</form>
+      </div>
+    </div>
+	</div>
+</template>
+
+<!-- template that displays several website items -->
+<template name="website_list">
+  {{#if searching_websites}}
+  <h1>
+    Searching websites with words: {{getSearchField}}
+  </h1>
+  {{/if}}
+	<ol>
+	{{#each websites}}
+	{{>website_item}}
+	{{/each}}
+	</ol>
+</template>
+
+<!-- template that displays individual website entries -->
+<template name="website_item">
+<li>
+	<a href="/websites/{{_id}}">{{title}}</a>
+  <h6>Created on <small>{{createdOn}}</small></h6>
+	<p>
+		{{description}}
+	</p>
+  <h4>Rating:<strong>{{ rating }}</strong></h4>
+   {{#if currentUser}}
+      	<a href="#" class="btn btn-default js-upvote">
+      		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+      	</a>
+      	<a href="#" class="btn btn-default js-downvote">
+      		<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+      	</a>
+    {{/if}}
+
+	<!-- you will be putting your up and down vote buttons in here! -->
+</li>
+</template>
+
+<!-- search -->
+<template name="search_form">
+  <form class="form-horizontal" role="search">
+     <div class="form-group">
+       <input type="text" class="form-control searchfield" placeholder="Search">
+     </div>
+  </form>
+</template>
+<!-- website detail -->
+<template name="website_details">
+  <div class="container">
+    {{> website}}
+    {{#if currentUser}}
+      {{> comment_form}}
+    {{/if}}
+    <h2> Comments </h2>
+    {{#if comments.count}}
+      {{#each comments}}
+          {{> comment}}
+      {{/each}}
+    {{else}}
+     <h5> No comments yet! </h5>
+    {{/if}}
+  </div>
+</template>
+<!-- comment -->
+<template name="comment">
+  <div class="row">
+    <div class="col-xs-12">
+      <h5>{{author createdBy}}<small>  commented on {{createdOn}}</small></h5>
+      <p>{{text}}</p>
+    </div>
+  </div>
+</template>
+
+<!-- comment_form -->
+<template name="comment_form">
+    <div class="row comment-row" >
+      <div class="col-xs-12">
+        <a class="btn btn-default js-toggle-comment-form" href="#">
+        		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Comment
+      	</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 hidden_div" id="comment_form">
+        <div class="panel">
+          <div class="panel-body">
+            <form class="js-save-comment-form" >
+              <div class="form-group">
+                <label for="text">What do you think?</label>
+                <textarea class="form-control" id="text" placeholder="Your opinion"></textarea>
+                <input type="hidden" id="websiteId" value="{{website._id}}" />
+              </div>
+
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+</template>
+
+<template name="website">
+  <div class="row">
+    <h2>{{website.title}} <small>{{website.description}}</small></h2>
+    <br/>
+    <a href="{{website.url}}" target="_blank" class="btn btn-success">Go to the website </a>
+    <a href="/" class="btn btn-primary"> Go back </a>
+  </div>
+</template>
