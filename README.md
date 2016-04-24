@@ -1,2 +1,2 @@
-# web_aggregrator
-## A simple web aggregator app made by using Meteor Fromework.
+# web_aggregator
+## A simple web aggregator app made using Meteor Framework.
